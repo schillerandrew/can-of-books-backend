@@ -21,6 +21,7 @@ async function seed() {
   });
   console.log('TT was added');
 
+  
   await Book.create({
     title: 'The Return of the King',
     description: 'RotK desc',
