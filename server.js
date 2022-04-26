@@ -23,9 +23,8 @@ db.once('open', function () {
   console.log('Mongoose is connected');
 });
 
-//////////////// we have to bring in a schema if we want to interact with that model
-// const Cat = require('./models/cat.js');
-// const req = require('express/lib/request');
+const Book = require('./models/book.js');
+const req = require('express/lib/request');
 
 //// ROUTES
 app.get('/', (request, response) => {
@@ -34,14 +33,14 @@ app.get('/', (request, response) => {
 
 app.get('/books', getBooks);
 
-///////////// working on this function
 async function getBooks(request, response, next) {
   try {
-    let queryObject = {}
+    let queryObject = {};
     if (request.query.location) {
       queryObject.location = request.query.location;
     }
-    let results = await Cat.find(queryObject);
+    console.log(queryObject.location);
+    let results = await Book.find(queryObject);
     response.status(200).send(results);
   } catch(err) {
     next(err);
