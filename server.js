@@ -7,7 +7,7 @@ const cors = require('cors');
 
 //// USE
 const app = express();
-app.use(cors()); //middleware
+
 
 //// define PORT to validate env is working
 const PORT = process.env.PORT || 3002;
@@ -23,6 +23,10 @@ db.once('open', function () {
   console.log('Mongoose is connected');
 });
 
+//// MIDDLEWARE
+app.use(cors());
+app.use(express.json());
+
 const Book = require('./models/book.js');
 const req = require('express/lib/request');
 
@@ -32,8 +36,9 @@ app.get('/', (request, response) => {
 });
 
 app.get('/books', getBooks);
+app.post('/books', postBooks);
 
-async function getBooks(request, response, next) {
+async function getBooks (request, response, next) {
   try {
     let queryObject = {};
     if (request.query.location) {
@@ -47,13 +52,23 @@ async function getBooks(request, response, next) {
   }
 }
 
+async function postBooks (request, response, next) {
+  console.log(request.body);
+  try {
+    let createdBook = await Book.create(request.body);
+    response.status(200).send(createdBook);
+  } catch(err) {
+    next(err);
+  }
+}
+
 app.get('*', (request, response) => {
   response.status(404).send('Not available');
 });
 
 // ERROR HANDLING
 app.use((error, request, response, next) => {
-  res.status(500).send(error.message);
+  response.status(500).send(error.message);
 });
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
