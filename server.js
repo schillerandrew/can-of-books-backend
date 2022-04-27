@@ -35,9 +35,8 @@ app.get('/', (request, response) => {
   response.status(200).send('Welcome!')
 });
 
-app.get('/books', getBooks);
-app.post('/books', postBooks);
 
+app.get('/books', getBooks);
 async function getBooks (request, response, next) {
   try {
     let queryObject = {};
@@ -52,6 +51,7 @@ async function getBooks (request, response, next) {
   }
 }
 
+app.post('/books', postBooks);
 async function postBooks (request, response, next) {
   console.log(request.body);
   try {
