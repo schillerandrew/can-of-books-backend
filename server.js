@@ -28,7 +28,7 @@ app.use(cors());
 app.use(express.json());
 
 const Book = require('./models/book.js');
-const req = require('express/lib/request');
+// const req = require('express/lib/request');
 
 //// ROUTES
 app.get('/', (request, response) => {
