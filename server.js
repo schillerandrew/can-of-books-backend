@@ -29,6 +29,7 @@ app.use(express.json());
 
 const Book = require('./models/book.js');
 const { response } = require('express');
+const res = require('express/lib/response');
 // const req = require('express/lib/request');
 
 //// ROUTES
@@ -72,6 +73,21 @@ async function deleteBooks (req, res) {
   } catch(err) {
     console.error(error);
     res.status(404).send(`Something went wrong, could not delete Book with id of ${id}`)
+  }
+}
+
+app.put('/books/:id', putBooks);
+async function putBooks (req, res) {
+  let id = req.params.id;
+  try {
+    // findByIdAndUpdate() method takes in 3 arguments
+    // - 1. ID of the thing in the database to update
+    // - 2. The updated data
+    // - 3. An options object 
+    let updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true, overwrite: true });
+  res.status(200).send(updatedBook);
+  } catch(err) {
+    next(err);
   }
 }
 
