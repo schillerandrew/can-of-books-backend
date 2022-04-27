@@ -28,6 +28,7 @@ app.use(cors());
 app.use(express.json());
 
 const Book = require('./models/book.js');
+const { response } = require('express');
 // const req = require('express/lib/request');
 
 //// ROUTES
@@ -61,6 +62,23 @@ async function postBooks (request, response, next) {
     next(err);
   }
 }
+
+app.delete('/books/:id', deleteBooks);
+async function deleteBooks (req, res) {
+  let id = req.params.id;
+  try {
+    await Book.findByIdAndDelete(id);
+    res.status(204).send('success');
+  } catch(err) {
+    console.error(error);
+    res.status(404).send(`Something went wrong, could not delete Book with id of ${id}`)
+  }
+}
+
+
+
+
+
 
 app.get('*', (request, response) => {
   response.status(404).send('Not available');
