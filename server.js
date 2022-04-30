@@ -42,10 +42,6 @@ app.get('/books', getBooks);
 async function getBooks (request, response, next) {
   try {
     let queryObject = {};
-    if (request.query.location) {
-      queryObject.location = request.query.location;
-    }
-    console.log(queryObject.location);
     let results = await Book.find(queryObject);
     response.status(200).send(results);
   } catch(err) {
@@ -55,7 +51,7 @@ async function getBooks (request, response, next) {
 
 app.post('/books', postBooks);
 async function postBooks (request, response, next) {
-  console.log(request.body);
+  console.log(request);
   try {
     let createdBook = await Book.create(request.body);
     response.status(200).send(createdBook);
@@ -71,7 +67,7 @@ async function deleteBooks (req, res) {
     await Book.findByIdAndDelete(id);
     res.status(204).send('success');
   } catch(err) {
-    console.error(error);
+    console.error(err);
     res.status(404).send(`Something went wrong, could not delete Book with id of ${id}`)
   }
 }
